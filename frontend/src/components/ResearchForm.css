@@ -1,0 +1,309 @@
+.researchForm {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* ==============================
+   FORM
+============================== */
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.formLabel {
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.formGroup input[type="text"] {
+  width: 100%;
+  padding: 15px 18px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: #0F172A;
+  color: white;
+  font-size: 15px;
+  transition: .3s;
+}
+
+.formGroup input[type="text"]::placeholder {
+  color: #94A3B8;
+}
+
+.formGroup input[type="text"]:focus {
+  outline: none;
+  border-color: #8B5CF6;
+  box-shadow: 0 0 0 3px rgba(124,58,237,.18);
+}
+
+/* ==============================
+   UPLOAD BOX
+============================== */
+
+.uploadBox {
+
+  position: relative;
+
+  width: 100%;
+
+  min-height: 230px;
+
+  border: 2px dashed rgba(124,58,237,.35);
+
+  border-radius: 18px;
+
+  background: rgba(255,255,255,.03);
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  cursor: pointer;
+
+  overflow: hidden;
+
+  transition: .3s;
+
+}
+
+.uploadBox:hover {
+
+  border-color: #8B5CF6;
+
+  background: rgba(124,58,237,.08);
+
+}
+
+.uploadBox input {
+
+  position: absolute;
+
+  inset: 0;
+
+  opacity: 0;
+
+  cursor: pointer;
+
+}
+
+/* ==============================
+   BEFORE UPLOAD
+============================== */
+
+.uploadContent {
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+
+}
+
+.uploadIcon {
+
+  font-size: 60px;
+
+  margin-bottom: 15px;
+
+}
+
+.uploadContent h3 {
+
+  color: white;
+
+  font-size: 22px;
+
+  margin-bottom: 10px;
+
+}
+
+.uploadContent p {
+
+  color: #CBD5E1;
+
+  font-size: 15px;
+
+}
+
+/* ==============================
+   AFTER UPLOAD
+============================== */
+
+.uploadedContent {
+
+  position: relative;
+
+  width: 100%;
+
+  height: 230px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  align-items: center;
+
+  text-align: center;
+
+}
+
+.pdfIcon {
+
+  font-size: 55px;
+
+  margin-bottom: 18px;
+
+}
+
+.fileName {
+
+  color: white;
+
+  font-size: 17px;
+
+  font-weight: 600;
+
+  max-width: 220px;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+}
+
+/* ==============================
+   REMOVE BUTTON
+============================== */
+
+.removeFile {
+
+  position: absolute;
+
+  top: 12px;
+
+  right: 12px;
+
+  width: 32px !important;
+
+  height: 32px !important;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: rgba(255,255,255,.15);
+
+  color: white;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  cursor: pointer;
+
+  font-size: 18px;
+
+  padding: 0 !important;
+
+  margin: 0 !important;
+
+  transition: .25s;
+
+}
+
+.removeFile:hover {
+
+  background: #EF4444;
+
+}
+
+/* IMPORTANT */
+/* Prevent Dashboard.css button styles from affecting this */
+
+.uploadedContent .removeFile {
+
+  flex: none !important;
+
+  min-width: 32px;
+
+  max-width: 32px;
+
+}
+
+/* ==============================
+   BUTTON
+============================== */
+
+.researchButton {
+
+  width: 100%;
+
+  padding: 16px;
+
+  border: none;
+
+  border-radius: 14px;
+
+  background: linear-gradient(
+      135deg,
+      #4F46E5,
+      #8B5CF6
+  );
+
+  color: white;
+
+  font-size: 17px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: .3s;
+
+}
+
+.researchButton:hover {
+
+  transform: translateY(-3px);
+
+  box-shadow: 0 18px 35px rgba(124,58,237,.35);
+
+}
+
+/* ==============================
+   RESPONSIVE
+============================== */
+
+@media (max-width:768px) {
+
+  .uploadBox {
+
+    min-height: 210px;
+
+  }
+
+  .uploadedContent {
+
+    height: 210px;
+
+  }
+
+}

@@ -1,0 +1,17 @@
+langgraph
+langchain
+langchain-groq
+langchain-community
+tavily-python
+qdrant-client
+langchain-qdrant
+sentence-transformers
+langchain-huggingface
+pypdf
+langchain-text-splitters
+fastapi
+uvicorn
+python-dotenv
+python-docx
+python-pptx
+pydantic
