@@ -2,7 +2,8 @@ from langchain_qdrant import QdrantVectorStore
 
 from config.settings import (
     COLLECTION_NAME,
-    QDRANT_URL
+    QDRANT_URL,
+    QDRANT_API_KEY
 )
 
 from rag.embeddings import embeddings
@@ -11,6 +12,7 @@ from rag.embeddings import embeddings
 vector_store = QdrantVectorStore.from_existing_collection(
     embedding=embeddings,
     url=QDRANT_URL,
+    api_key=QDRANT_API_KEY,
     collection_name=COLLECTION_NAME
 )
 

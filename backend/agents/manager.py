@@ -1,6 +1,5 @@
 from memory.state import ResearchState
 
-
 def manager_agent(state: ResearchState) -> ResearchState:
 
     print("\n========== MANAGER AGENT ==========")

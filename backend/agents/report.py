@@ -8,26 +8,83 @@ from llm import llm
 
 from tools.report_generator import generate_report
 from tools.ppt_generator import generate_ppt
+from tools.report_parser import parse_report
+from tools.image_search import attach_images
+
+
+def generate_image_query(topic: str, section: str, content: str):
+
+    prompt = f"""
+You are an expert at creating image search queries.
+
+Research Topic:
+{topic}
+
+Section:
+{section}
+
+Section Content:
+{content[:500]}
+
+Generate ONE professional image search query.
+
+Rules:
+- Maximum 6 words.
+- Focus on what should appear in the picture.
+- Avoid generic words.
+- Do not use punctuation.
+- Return ONLY the search query.
+
+Examples
+
+Topic:
+AI in Healthcare
+
+Executive Summary
+
+Output:
+medical artificial intelligence hospital
+
+----------------------
+
+Topic:
+AI in Education
+
+Introduction
+
+Output:
+students using AI classroom
+
+----------------------
+
+Topic:
+Cybersecurity
+
+Challenges
+
+Output:
+cyber security data center
+"""
+
+    response = llm.invoke(
+        [
+            HumanMessage(content=prompt)
+        ]
+    )
+
+    return response.content.strip()
 
 
 def report_agent(state: ResearchState) -> ResearchState:
 
     print("\n========== REPORT AGENT ==========")
 
-    # ----------------------------------------
-    # Combine Research Results
-    # ----------------------------------------
-
     research_text = "\n\n".join(state["research_results"])
 
     research_text = research_text[:5000]
 
-    # ----------------------------------------
-    # Prompt
-    # ----------------------------------------
-
     prompt = f"""
-You are an expert technical report writer.
+You are an expert technical research writer.
 
 Research Topic:
 {state["topic"]}
@@ -37,36 +94,61 @@ Research Material:
 
 Write a professional research report.
 
-Use the following structure exactly.
+IMPORTANT:
 
-# Executive Summary
+Use proper Markdown formatting.
+
+The report MUST follow this exact structure.
+
+# Research Report: {state["topic"]}
+
+## Executive Summary
+
 Write a concise summary (120-150 words).
 
-# Introduction
+## Introduction
+
 Introduce the topic.
 
-# Main Findings
-Present the important findings clearly using headings or bullet points when appropriate.
+## Main Findings
 
-# Challenges
-Discuss limitations and challenges.
+Present the important findings.
 
-# Future Scope
-Explain possible future developments.
+IMPORTANT:
+Use proper markdown bullet points.
 
-# Conclusion
-Provide a short conclusion.
+Example:
 
-# References
-List reliable references that support the report.
+- Point one
+
+- Point two
+
+- Point three
+
+Do NOT place all points in one paragraph.
+
+## Challenges
+
+Use bullet points whenever possible.
+
+## Future Scope
+
+Use bullet points whenever possible.
+
+## Conclusion
+
+Provide a professional conclusion.
+
+## References
+
+List reliable references.
 
 Rules:
-- Use only information from the provided research material.
+
+- Use ONLY the provided research material.
 - Do not invent references.
-- If URLs or source names are available in the research material, include them.
-- If exact URLs are unavailable, provide source names only.
-- Write in professional language.
-- Use proper headings.
+- Use professional language.
+- Use markdown headings.
 """
 
     print("Generating Final Report...")
@@ -77,95 +159,126 @@ Rules:
         ]
     )
 
-    report = response.content
+    report = response.content.strip()
 
     print("Report Generated.")
 
-    # ----------------------------------------
-    # Executive Summary
-    # ----------------------------------------
+    parsed_report = parse_report(report)
+
+    print("Generating Image Queries...")
+
+    enhanced_sections = []
+
+    for section in parsed_report["sections"]:
+
+        query = generate_image_query(
+
+            state["topic"],
+
+            section["title"],
+
+            section["content"]
+
+        )
+
+        print(f"{section['title']} -> {query}")
+
+        section["image_query"] = query
+
+        enhanced_sections.append(section)
+
+    print("Searching Images...")
+
+    report_with_images = attach_images(
+
+        state["topic"],
+
+        enhanced_sections
+
+    )
 
     summary = ""
 
-    if "# Executive Summary" in report:
+    try:
 
-        try:
+        if "## Executive Summary" in report:
 
             summary = (
-                report.split("# Executive Summary")[1]
-                .split("# Introduction")[0]
+
+                report.split("## Executive Summary")[1]
+
+                .split("## Introduction")[0]
+
                 .strip()
+
             )
 
-        except Exception:
+    except Exception:
 
-            summary = ""
-
-    # ----------------------------------------
-    # References
-    # ----------------------------------------
+        pass
 
     references = ""
 
-    if "# References" in report:
+    try:
 
-        try:
+        if "## References" in report:
 
             references = (
-                report.split("# References")[1]
+
+                report.split("## References")[1]
+
                 .strip()
+
             )
 
-        except Exception:
+    except Exception:
 
-            references = ""
-
-    # ----------------------------------------
-    # Save to State
-    # ----------------------------------------
+        pass
 
     state["report"] = report
+
     state["summary"] = summary
+
     state["references"] = references
 
-    # ----------------------------------------
-    # Unique File Names
-    # ----------------------------------------
+    state["sections"] = report_with_images["sections"]
+
+    state["hero"] = report_with_images["hero"]
+
+    state["images"] = report_with_images
 
     safe_topic = re.sub(
+
         r"[^a-zA-Z0-9]+",
+
         "_",
+
         state["topic"]
+
     )
 
-    timestamp = datetime.now().strftime(
-        "%Y%m%d_%H%M%S"
-    )
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-    report_path = (
-        f"reports/{safe_topic}_{timestamp}.docx"
-    )
+    report_path = f"reports/{safe_topic}_{timestamp}.docx"
 
-    ppt_path = (
-        f"presentations/{safe_topic}_{timestamp}.pptx"
-    )
-
-    # ----------------------------------------
-    # Generate Files
-    # ----------------------------------------
+    ppt_path = f"presentations/{safe_topic}_{timestamp}.pptx"
 
     generate_report(
-        report,
-        report_path
-    )
-
+    report=report,
+    hero=report_with_images["hero"],
+    sections=report_with_images["sections"],
+    filename=report_path
+)
     generate_ppt(
-        state["topic"],
-        report,
-        ppt_path
-    )
+    title=state["topic"],
+    report=report,
+    hero=report_with_images["hero"],
+    sections=report_with_images["sections"],
+    filename=ppt_path
+)
 
     state["report_path"] = report_path
+
     state["ppt_path"] = ppt_path
 
     print("Documents Saved Successfully.")

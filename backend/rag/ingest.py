@@ -6,6 +6,7 @@ from config.settings import (
     DOCS_FOLDER,
     COLLECTION_NAME,
     QDRANT_URL,
+    QDRANT_API_KEY,
     CHUNK_SIZE,
     CHUNK_OVERLAP
 )
@@ -16,7 +17,7 @@ from tools.pdf_loader import load_pdf_documents
 
 
 documents = load_pdf_documents(DOCS_FOLDER)
-
+print(f"Documents loaded: {len(documents)}")
 
 text_splitter = RecursiveCharacterTextSplitter(
     chunk_size=CHUNK_SIZE,
@@ -28,11 +29,12 @@ chunks = text_splitter.split_documents(
     documents
 )
 
-
+print(f"Chunks created: {len(chunks)}")
 vector_store = QdrantVectorStore.from_documents(
     documents=chunks,
     embedding=embeddings,
     url=QDRANT_URL,
+    api_key=QDRANT_API_KEY,
     collection_name=COLLECTION_NAME
 )
 

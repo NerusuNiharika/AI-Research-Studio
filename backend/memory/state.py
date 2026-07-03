@@ -10,19 +10,31 @@ class ResearchState(TypedDict):
     # Planner Output
     research_plan: list[str]
 
-    # Research Agent Output
+    # Research Results
     research_results: Annotated[list[str], operator.add]
 
     # Reviewer
     reviewer_feedback: str
+
     approved: bool
+
     retry_count: int
 
-    # Final Outputs
-    summary: str
+    # Final Report
     report: str
+
+    summary: str
+
     references: str
+
+    # Parsed Report Sections
+    sections: list
+    hero: dict
+
+    # Images
+    images: dict
 
     # Generated Files
     report_path: str
+
     ppt_path: str

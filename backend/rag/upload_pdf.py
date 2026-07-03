@@ -6,6 +6,7 @@ from langchain_qdrant import QdrantVectorStore
 
 from config.settings import (
     QDRANT_URL,
+    QDRANT_API_KEY,
     COLLECTION_NAME,
     CHUNK_SIZE,
     CHUNK_OVERLAP,
@@ -42,8 +43,9 @@ def upload_pdf_to_qdrant(pdf_path: str):
     vector_store = QdrantVectorStore.from_existing_collection(
         embedding=embeddings,
         url=QDRANT_URL,
+        api_key=QDRANT_API_KEY,
         collection_name=COLLECTION_NAME,
-    )
+)
 
     # -----------------------------
     # Add Uploaded PDF Chunks

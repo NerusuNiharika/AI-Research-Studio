@@ -3,9 +3,7 @@ from langchain_core.messages import HumanMessage
 from memory.state import ResearchState
 from llm import llm
 
-
 def planner_agent(state: ResearchState) -> ResearchState:
-
     print("\n========== PLANNER AGENT ==========")
 
     prompt = f"""
@@ -49,7 +47,6 @@ Do not add explanations or extra text.
 
             plan.append(line)
 
-    # Keep only the first 4 objectives even if the model returns more
     state["research_plan"] = plan[:4]
 
     print("\nResearch Objectives:")

@@ -4,27 +4,24 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
-# API Keys
-
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 
+PEXELS_API_KEY = os.getenv("PEXELS_API_KEY")
 
+QDRANT_URL = os.getenv("QDRANT_URL")
+
+QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
+
+COLLECTION_NAME = os.getenv("COLLECTION_NAME")
+
+SECRET_KEY = os.getenv("SECRET_KEY")
 # LLM
 
 MODEL_NAME = "llama-3.1-8b-instant"
 
 TEMPERATURE = 0
-
-
-# Qdrant
-
-QDRANT_URL = "http://localhost:6333"
-
-COLLECTION_NAME = "research_documents"
-
 
 
 # Embeddings
@@ -49,6 +46,5 @@ REPORT_FOLDER = "reports"
 
 PRESENTATION_FOLDER = "presentations"
 
-SECRET_KEY = "your_super_secret_key_change_this"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60

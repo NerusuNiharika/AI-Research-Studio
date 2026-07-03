@@ -111,6 +111,15 @@ async def research(
 
         "report": "",
 
+        "summary": "",
+
+        "references": "",
+
+        "sections": [],
+
+        "images": {},
+        "hero": {},
+
         "report_path": "",
 
         "ppt_path": ""
@@ -153,10 +162,14 @@ async def research(
 
     return ResearchResponse(
 
-        report=result["report"],
+    report=result["report"],
 
-        report_path=result["report_path"],
+    hero=result["images"]["hero"],
 
-        ppt_path=result["ppt_path"]
+    sections=result["sections"],
 
-    )
+    report_path=result["report_path"],
+
+    ppt_path=result["ppt_path"]
+
+)

@@ -14,8 +14,11 @@ function Dashboard() {
 
   const [report, setReport] = useState("");
 
+  const [sections, setSections] = useState([]);
+
   const [reportPath, setReportPath] = useState("");
   const [pptPath, setPptPath] = useState("");
+  const [hero, setHero] = useState(null);
 
   const startResearch = async (topic, file) => {
 
@@ -47,12 +50,18 @@ function Dashboard() {
       );
 
       setReport(response.data.report);
+      setHero(response.data.hero);
+
+      setSections(response.data.sections || []);
+
       setReportPath(response.data.report_path);
+
       setPptPath(response.data.ppt_path);
 
     } catch (error) {
 
       console.error(error);
+
       alert("Research Failed");
 
     } finally {
@@ -73,8 +82,6 @@ function Dashboard() {
 
       <div className="dashboard">
 
-        {/* Header */}
-
         <div className="pageHeader">
 
           <div>
@@ -89,18 +96,16 @@ function Dashboard() {
 
         </div>
 
-        {/* Main Grid */}
-
         <div className="workspace">
-
-          {/* LEFT PANEL */}
 
           <div className="leftPanel">
 
             <div className="card">
 
               <div className="cardTitle">
+
                 📂 Research Input
+
               </div>
 
               <ResearchForm onStart={startResearch} />
@@ -110,7 +115,9 @@ function Dashboard() {
             <div className="card statusCard">
 
               <div className="cardTitle">
+
                 🤖 AI Status
+
               </div>
 
               <div className="statusItem">
@@ -134,7 +141,9 @@ function Dashboard() {
             <div className="card tipsCard">
 
               <div className="cardTitle">
+
                 💡 Tips
+
               </div>
 
               <ul>
@@ -153,8 +162,6 @@ function Dashboard() {
 
           </div>
 
-          {/* RIGHT PANEL */}
-
           <div className="rightPanel">
 
             <div className="reportHeader">
@@ -165,6 +172,8 @@ function Dashboard() {
 
             <ResearchResults
               report={report}
+              hero={hero}
+              sections={sections}
               reportPath={reportPath}
               pptPath={pptPath}
             />
