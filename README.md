@@ -120,7 +120,7 @@ The platform enables users to upload PDF documents, retrieve relevant contextual
 ## 📑 Generated Research Report
 
 <p align="center">
-  <img src="screenshots/report-preview.png" width="900">
+  <img src="screenshots/report_preview.png" width="900">
 </p>
 
 ---
