@@ -11,7 +11,7 @@ from config.settings import (
     CHUNK_OVERLAP
 )
 
-from rag.embeddings import embeddings
+from rag.embeddings import get_embeddings
 
 from tools.pdf_loader import load_pdf_documents
 
@@ -32,7 +32,7 @@ chunks = text_splitter.split_documents(
 print(f"Chunks created: {len(chunks)}")
 vector_store = QdrantVectorStore.from_documents(
     documents=chunks,
-    embedding=embeddings,
+    embedding=get_embeddings(),
     url=QDRANT_URL,
     api_key=QDRANT_API_KEY,
     collection_name=COLLECTION_NAME

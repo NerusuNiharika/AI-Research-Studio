@@ -6,27 +6,33 @@ from config.settings import (
     QDRANT_API_KEY
 )
 
-from rag.embeddings import embeddings
+from rag.embeddings import get_embeddings
 
 
-vector_store = QdrantVectorStore.from_existing_collection(
-    embedding=embeddings,
-    url=QDRANT_URL,
-    api_key=QDRANT_API_KEY,
-    collection_name=COLLECTION_NAME
-)
+retriever = None
 
 
-retriever = vector_store.as_retriever(
-    search_kwargs={
-        "k": 2
-    }
-)
+def get_retriever():
+    global retriever
+
+    if retriever is None:
+        vector_store = QdrantVectorStore.from_existing_collection(
+            embedding=get_embeddings(),
+            url=QDRANT_URL,
+            api_key=QDRANT_API_KEY,
+            collection_name=COLLECTION_NAME,
+        )
+
+        retriever = vector_store.as_retriever(
+            search_kwargs={"k": 2}
+        )
+
+    return retriever
 
 
 def retrieve_context(query: str) -> str:
 
-    documents = retriever.invoke(query)
+    documents = get_retriever().invoke(query)
 
     context = "\n\n".join(
         document.page_content

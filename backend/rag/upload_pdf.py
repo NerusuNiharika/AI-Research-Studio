@@ -12,7 +12,7 @@ from config.settings import (
     CHUNK_OVERLAP,
 )
 
-from rag.embeddings import embeddings
+from rag.embeddings import get_embeddings
 
 
 def upload_pdf_to_qdrant(pdf_path: str):
@@ -41,7 +41,7 @@ def upload_pdf_to_qdrant(pdf_path: str):
     # -----------------------------
 
     vector_store = QdrantVectorStore.from_existing_collection(
-        embedding=embeddings,
+        embedding=get_embeddings(),
         url=QDRANT_URL,
         api_key=QDRANT_API_KEY,
         collection_name=COLLECTION_NAME,
