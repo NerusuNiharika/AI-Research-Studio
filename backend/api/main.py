@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -29,6 +30,10 @@ app.add_middleware(
 
 # Register API routes
 app.include_router(router)
+
+# Create folders if they don't exist
+os.makedirs("reports", exist_ok=True)
+os.makedirs("presentations", exist_ok=True)
 
 # Serve generated files
 app.mount("/reports", StaticFiles(directory="reports"), name="reports")
