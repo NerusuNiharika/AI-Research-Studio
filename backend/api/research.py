@@ -11,13 +11,9 @@ from fastapi import (
 
 from sqlalchemy.orm import Session
 
-from workflows.graph import graph
-
 from models.response import ResearchResponse
 from models.research import Research
 from models.user import User
-
-from rag.upload_pdf import upload_pdf_to_qdrant
 
 from config.settings import UPLOAD_FOLDER
 
@@ -65,10 +61,18 @@ async def research(
 ):
 
     # ----------------------------------
+    # Lazy Imports (Load only when needed)
+    # ----------------------------------
+
+    from workflows.graph import graph
+
+    # ----------------------------------
     # Save Uploaded PDF
     # ----------------------------------
 
     if file is not None:
+
+        from rag.upload_pdf import upload_pdf_to_qdrant
 
         os.makedirs(
             UPLOAD_FOLDER,
@@ -162,14 +166,14 @@ async def research(
 
     return ResearchResponse(
 
-    report=result["report"],
+        report=result["report"],
 
-    hero=result["images"]["hero"],
+        hero=result["images"]["hero"],
 
-    sections=result["sections"],
+        sections=result["sections"],
 
-    report_path=result["report_path"],
+        report_path=result["report_path"],
 
-    ppt_path=result["ppt_path"]
+        ppt_path=result["ppt_path"]
 
-)
+    )
