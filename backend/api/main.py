@@ -46,3 +46,15 @@ def home():
     return {
         "message": "AI Research Studio Backend Running"
     }
+@app.get("/test-groq")
+def test_groq():
+
+    from llm import llm
+
+    response = llm.invoke(
+        "Reply with exactly: GROQ WORKING"
+    )
+
+    return {
+        "response": response.content
+    }
