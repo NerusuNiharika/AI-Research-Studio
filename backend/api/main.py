@@ -46,3 +46,15 @@ def home():
     return {
         "message": "AI Research Studio Backend Running"
     }
+@app.get("/test-embedding")
+def test_embedding():
+    from rag.embeddings import get_embeddings
+
+    embeddings = get_embeddings()
+
+    vector = embeddings.embed_query("Artificial Intelligence")
+
+    return {
+        "message": "EMBEDDING WORKING",
+        "dimension": len(vector)
+    }
