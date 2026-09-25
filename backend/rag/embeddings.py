@@ -11,7 +11,8 @@ def get_embeddings():
 
     if _embeddings is None:
         _embeddings = HuggingFaceEmbeddings(
-            model_name=EMBEDDING_MODEL
+            model_name=EMBEDDING_MODEL,
+            model_kwargs={"device": "cpu"},
         )
 
     return _embeddings
