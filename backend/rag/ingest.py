@@ -35,7 +35,8 @@ vector_store = QdrantVectorStore.from_documents(
     embedding=get_embeddings(),
     url=QDRANT_URL,
     api_key=QDRANT_API_KEY,
-    collection_name=COLLECTION_NAME
+    collection_name=COLLECTION_NAME,
+    batch_size=32
 )
 
 print("Documents stored successfully in Qdrant.")

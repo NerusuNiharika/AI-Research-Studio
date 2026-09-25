@@ -12,9 +12,11 @@ venv/
 
 # Environment Variables
 .env
+.env.*
 
 # Database
 *.db
+*.sqlite3
 
 # ==========================
 # React

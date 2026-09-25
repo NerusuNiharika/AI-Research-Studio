@@ -3,7 +3,9 @@ from langchain_core.messages import HumanMessage
 from memory.state import ResearchState
 from llm import llm
 
+
 def planner_agent(state: ResearchState) -> ResearchState:
+
     print("\n========== PLANNER AGENT ==========")
 
     prompt = f"""

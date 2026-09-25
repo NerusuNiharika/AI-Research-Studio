@@ -21,7 +21,7 @@ COLLECTION_NAME = os.getenv("COLLECTION_NAME")
 SECRET_KEY = os.getenv("SECRET_KEY")
 # LLM
 
-MODEL_NAME = "llama-3.1-8b-instant"
+MODEL_NAME = "openai/gpt-oss-20b"
 
 TEMPERATURE = 0
 
