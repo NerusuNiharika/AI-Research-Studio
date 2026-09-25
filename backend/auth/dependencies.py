@@ -11,7 +11,10 @@ from auth.jwt_handler import (
     SECRET_KEY,
     ALGORITHM,
 )
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+
+oauth2_scheme = OAuth2PasswordBearer(
+    tokenUrl="/auth/token"
+)
 
 
 def get_db():

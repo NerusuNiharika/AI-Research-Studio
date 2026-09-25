@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
 from models.auth import (
@@ -15,8 +16,7 @@ from auth.security import (
 from auth.jwt_handler import create_access_token
 from database.database import SessionLocal
 from models.user import User
-from models.auth import RegisterRequest
-from auth.security import hash_password
+
 
 router = APIRouter(
     prefix="/auth",
@@ -24,7 +24,10 @@ router = APIRouter(
 )
 
 
+# -------------------------
 # Database Dependency
+# -------------------------
+
 def get_db():
 
     db = SessionLocal()
@@ -76,14 +79,18 @@ def register(
     )
 
     db.add(new_user)
-
     db.commit()
-
     db.refresh(new_user)
 
     return {
         "message": "Registration Successful"
     }
+
+
+# -------------------------
+# Login API
+# -------------------------
+
 @router.post(
     "/login",
     response_model=TokenResponse
@@ -107,6 +114,54 @@ def login(
     # Verify password
     if not verify_password(
         user.password,
+        db_user.password
+    ):
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid username or password."
+        )
+
+    # Create JWT
+    access_token = create_access_token(
+        {
+            "sub": db_user.username
+        }
+    )
+
+    return {
+        "access_token": access_token,
+        "token_type": "bearer"
+    }
+
+
+# -------------------------
+# OAuth2 Token API
+# Used by Swagger Authorize
+# -------------------------
+
+@router.post(
+    "/token",
+    response_model=TokenResponse
+)
+def token(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    db: Session = Depends(get_db)
+):
+
+    # Find user
+    db_user = db.query(User).filter(
+        User.username == form_data.username
+    ).first()
+
+    if not db_user:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid username or password."
+        )
+
+    # Verify password
+    if not verify_password(
+        form_data.password,
         db_user.password
     ):
         raise HTTPException(
