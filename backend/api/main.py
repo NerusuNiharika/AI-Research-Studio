@@ -58,3 +58,30 @@ def test_groq():
     return {
         "response": response.content
     }
+@app.get("/test-workflow")
+def test_workflow():
+    from workflows.graph import graph
+
+    initial_state = {
+        "topic": "Artificial Intelligence",
+        "research_plan": [],
+        "research_results": [],
+        "reviewer_feedback": "",
+        "approved": False,
+        "retry_count": 0,
+        "report": "",
+        "summary": "",
+        "references": "",
+        "sections": [],
+        "images": {},
+        "hero": {},
+        "report_path": "",
+        "ppt_path": ""
+    }
+
+    result = graph.invoke(initial_state)
+
+    return {
+        "message": "WORKFLOW WORKING",
+        "report": result.get("report", "")[:200]
+    }
